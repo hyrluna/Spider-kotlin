@@ -1,0 +1,108 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/wallpaper_fragment"
+    tools:context="lunax.spider.wallpaperpage.WallpaperFragment">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycleView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:id="@+id/image_search_button"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom|right"-->
+        <!--android:layout_margin="16dp"-->
+        <!--android:src="@drawable/ic_search_white_24px"-->
+        <!--android:clickable="true"-->
+        <!--app:layout_anchor="@id/recycleView"-->
+        <!--app:layout_anchorGravity="bottom|right|end" />-->
+
+    <lunax.spider.widget.Fab
+        android:id="@+id/fab"
+        style="@style/Widget.MaterialSheetFab.Fab"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true" />
+
+    <!-- Overlay that dims the screen -->
+    <lunax.spider.widget.DimOverlayFrameLayout
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Circular reveal container for the sheet -->
+    <lunax.spider.widget.RevealLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="end|bottom"
+        android:orientation="vertical">
+
+        <!-- Sheet that contains your items -->
+        <android.support.v7.widget.CardView
+            android:id="@+id/fab_sheet"
+            style="@style/Widget.MaterialSheetFab.Sheet">
+
+            <!-- Sheet items -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Recording -->
+                <TextView
+                    android:id="@+id/fab_sheet_item_recording"
+                    style="@style/TextAppearance.MaterialSheetFab.Sheet.Item"
+                    android:drawableLeft="@drawable/ic_mic_grey600_24dp"
+                    android:drawableStart="@drawable/ic_mic_grey600_24dp"
+                    android:text="@string/recording" />
+
+                <!-- Reminder -->
+                <TextView
+                    android:id="@+id/fab_sheet_item_reminder"
+                    style="@style/TextAppearance.MaterialSheetFab.Sheet.Item"
+                    android:drawableLeft="@drawable/ic_access_alarms_grey600_24dp"
+                    android:drawableStart="@drawable/ic_access_alarms_grey600_24dp"
+                    android:text="@string/reminder" />
+
+                <!-- Photo -->
+                <TextView
+                    android:id="@+id/fab_sheet_item_photo"
+                    style="@style/TextAppearance.MaterialSheetFab.Sheet.Item"
+                    android:drawableLeft="@drawable/ic_photo_camera_grey600_24dp"
+                    android:drawableStart="@drawable/ic_photo_camera_grey600_24dp"
+                    android:text="@string/photo" />
+
+                <!-- Note -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/theme_accent">
+
+                    <TextView
+                        android:id="@+id/fab_sheet_item_note"
+                        style="@style/TextAppearance.MaterialSheetFab.Sheet.Item"
+                        android:drawableLeft="@drawable/ic_create_grey600_24dp"
+                        android:drawableStart="@drawable/ic_create_grey600_24dp"
+                        android:text="@string/createnote" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </lunax.spider.widget.RevealLinearLayout>
+
+
+</RelativeLayout>
