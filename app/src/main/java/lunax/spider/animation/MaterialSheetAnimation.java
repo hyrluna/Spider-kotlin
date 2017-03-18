@@ -58,7 +58,7 @@ public class MaterialSheetAnimation {
 
 	/**
 	 * Aligns the sheet's position with the FAB.
-	 * 
+	 *
 	 * @param fab Floating action button
 	 */
 	public void alignSheetWithFab(View fab) {

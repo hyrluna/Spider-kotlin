@@ -16,7 +16,7 @@ public class SpiderApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        DaggerSpiderRepositoryComponent.builder()
+        mSpiderRepositoryComponent = DaggerSpiderRepositoryComponent.builder()
                 .applicationModule(new ApplicationModule(this))
                 .build();
 

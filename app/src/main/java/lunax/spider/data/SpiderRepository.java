@@ -1,7 +1,10 @@
 package lunax.spider.data;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import lunax.spider.data.local.SpiderLocalDataSource;
 import lunax.spider.data.remote.SpiderRemoteDataSource;
 
@@ -19,5 +22,10 @@ public class SpiderRepository implements SpiderDataSource {
                             SpiderRemoteDataSource spiderRemoteDataSource) {
         mSpiderLocalDataSource = spiderLocalDataSource;
         mSpiderRemoteDataSource = spiderRemoteDataSource;
+    }
+
+    @Override
+    public Observable<Album> getAlbums(String type) {
+        return mSpiderRemoteDataSource.getAlbums(type);
     }
 }

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Spider.iml" filepath="$PROJECT_DIR$/Spider.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Spider-kotlin.iml" filepath="$PROJECT_DIR$/Spider-kotlin.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

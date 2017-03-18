@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="lunax.spider.MainActivity">
+    tools:context="lunax.spider.t">
 
     <FrameLayout
         android:id="@+id/content"

@@ -32,6 +32,7 @@ import io.reactivex.schedulers.Schedulers;
 import lunax.spider.data.Album;
 import lunax.spider.BaseFragment;
 import lunax.spider.R;
+import lunax.spider.data.remote.NetworkRequest;
 import lunax.spider.widget.Fab;
 import lunax.spider.widget.MaterialSheetFab;
 import lunax.spider.widget.MaterialSheetFabEventListener;
@@ -164,7 +165,8 @@ public class WallpaperFragment extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
-        loadAlbums("http://download.pchome.net/wallpaper/meinv/");
+//        loadAlbums("http://download.pchome.net/wallpaper/meinv/");
+        mPresenter.loadAlbums(NetworkRequest.QUERY_TYPE_GIRL);
     }
 
     @Override
@@ -193,6 +195,13 @@ public class WallpaperFragment extends BaseFragment
     @Override
     public void setPresenter(WallpaperContract.Presenter presenter) {
         mPresenter = presenter;
+    }
+
+    @Override
+    public void showAlbumsView(List<Album> albums) {
+        mAlbums.clear();
+        mAlbums.addAll(albums);
+        mAlbumAdapter.notifyDataSetChanged();
     }
 
     public void closePopSelector() {

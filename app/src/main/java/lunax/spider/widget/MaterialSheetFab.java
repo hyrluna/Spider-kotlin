@@ -18,7 +18,7 @@ import io.codetail.animation.arcanimator.Side;
 
 /**
  * Created by Gordon Wong on 7/9/2015.
- * 
+ *
  * Handles the interactions between the FAB and the material sheet that the FAB morphs into.
  */
 public class MaterialSheetFab<FAB extends View & AnimatedFab> {

@@ -22,7 +22,7 @@ public class OverlayAnimation {
 
 	/**
 	 * Shows the overlay.
-	 * 
+	 *
 	 * @param duration Duration of the animation in milliseconds. Use 0 for no animation.
 	 * @param listener Listener for animation events.
 	 */
@@ -48,7 +48,7 @@ public class OverlayAnimation {
 
 	/**
 	 * Hides the overlay.
-	 * 
+	 *
 	 * @param duration Duration of the animation in milliseconds. Use 0 for no animation.
 	 * @param listener Listener for animation events.
 	 */
