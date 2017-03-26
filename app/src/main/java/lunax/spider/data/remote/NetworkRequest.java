@@ -17,7 +17,8 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
-import lunax.spider.data.Album;
+import lunax.spider.data.dataitem.Album;
+import lunax.spider.data.dataitem.Wallpaper;
 
 /**
  * Created by Bamboo on 3/18/2017.
@@ -62,14 +63,38 @@ public class NetworkRequest {
                     public ObservableSource<Album> apply(Element element) throws Exception {
                         Element a = element.select("a").first();
                         Element img = element.select("img").first();
+                        //第一张大图
                         String typeUrl = a.absUrl("href");
                         String title = element.select("span").first().text();
                         //获取每种类型图集的大图
-                        String sourceUrl = getAlbumImage(typeUrl);
-                        Log.d("test", "banner url: "+sourceUrl);
-                        return Observable.just(new Album(sourceUrl, title, typeUrl));
+                        List<Wallpaper> wallpapers = new ArrayList<>();
+                        List<String> bigImgHrefs = getBigImgUrls(typeUrl);
+                        for (String href : bigImgHrefs) {
+                            wallpapers.add(new Wallpaper(href, getAlbumImage(href)));
+                        }
+                        Log.d("test", "bigImgUrls.size: "+wallpapers.size());
+                        return Observable.just(new Album(title, wallpapers));
                     }
                 });
+    }
+
+    private List<String> getBigImgUrls(String url) throws IOException {
+        Document doc = Jsoup.connect(url)
+                .userAgent("Mozilla")
+                .get();
+        List<String> hrefs = new ArrayList<>();
+        Elements uls = doc.select("ul");
+        for (Element ul : uls) {
+            if (ul.attr("id").equals("showImg")) {
+                Elements imgELs = ul.select("a");
+                for (Element imgEl : imgELs) {
+                    String href = imgEl.absUrl("href");
+                    Log.d("test", "img url: "+href);
+                    hrefs.add(href);
+                }
+            }
+        }
+        return hrefs;
     }
 
     private String getAlbumImage(String href) throws IOException {
@@ -81,8 +106,8 @@ public class NetworkRequest {
             if (p.attr("class").equals("photo")) {
                 //当前显示图片
                 String imageUrl = p.select("img").first().attr("src");
+                Log.d("test", "get big img");
                 return imageUrl;
-//                Log.d("test", "url: "+imageUrl+", "+p.select("img").first().attr("alt"));
             }
         }
         return "";

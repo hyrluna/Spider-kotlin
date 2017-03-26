@@ -1,9 +1,11 @@
 package lunax.spider.wallpaperpage;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,10 +31,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import lunax.spider.data.Album;
+import lunax.spider.common.SUtil;
+import lunax.spider.data.dataitem.Album;
 import lunax.spider.BaseFragment;
 import lunax.spider.R;
 import lunax.spider.data.remote.NetworkRequest;
+import lunax.spider.wallpaperlistpage.WallpaperListActivity;
 import lunax.spider.widget.Fab;
 import lunax.spider.widget.MaterialSheetFab;
 import lunax.spider.widget.MaterialSheetFabEventListener;
@@ -108,7 +112,7 @@ public class WallpaperFragment extends BaseFragment
 
         recyclerView.setLayoutManager(new LinearLayoutManager(parentActivity));
         mAlbums = new ArrayList<>();
-        mAlbumAdapter = new WallpaperAlbumAdapter(mAlbums, parentActivity);
+        mAlbumAdapter = new WallpaperAlbumAdapter(mAlbums, parentActivity, mPresenter);
         recyclerView.setAdapter(mAlbumAdapter);
 
         Fab fab = (Fab) v.findViewById(R.id.fab);
@@ -165,7 +169,6 @@ public class WallpaperFragment extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
-//        loadAlbums("http://download.pchome.net/wallpaper/meinv/");
         mPresenter.loadAlbums(NetworkRequest.QUERY_TYPE_GIRL);
     }
 
@@ -204,6 +207,15 @@ public class WallpaperFragment extends BaseFragment
         mAlbumAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void showWallpaperDownloadSelectView(String url) {
+//        Intent intent = new Intent(parentActivity, WallpaperListActivity.class);
+//        intent.putExtra(WallpaperListActivity.EXTRA_IMAGE_LIST_URL, url);
+//        startActivity(intent);
+//        BottomSheetDialog dialog = new BottomSheetDialog(parentActivity);
+        SUtil.showToast(parentActivity, "download dialog");
+    }
+
     public void closePopSelector() {
         popUpWindow.dismiss();
     }
@@ -223,65 +235,6 @@ public class WallpaperFragment extends BaseFragment
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             parentActivity.getWindow().setStatusBarColor(color);
         }
-    }
-
-    private void loadAlbums(String url) {
-        Observable.just(url)
-                .subscribeOn(Schedulers.io())
-                .flatMap(new Function<String, ObservableSource<List<Album>>>() {
-                    @Override
-                    public ObservableSource<List<Album>> apply(String s) throws Exception {
-                        List<Album> albumList = new ArrayList<>();
-                        Document doc = Jsoup.connect(s)
-                                .userAgent("Mozilla")
-                                .get();
-                        Log.d("test", "connected");
-                        Elements uls = doc.select("ul");
-                        for (Element e : uls) {
-                            if (e.attr("class").equals("pic-list2 clearfix")) {
-                                Elements lis = e.select("li");
-                                for (Element li : lis) {
-                                    Element a = li.select("a").first();
-                                    Element img = li.select("img").first();
-                                    String typeUrl = a.absUrl("href");
-                                    String title = li.select("span").first().text();
-                                    String sourceUrl = getAlbumImage(typeUrl);
-                                    Log.d("test", "banner url: "+sourceUrl);
-                                    albumList.add(new Album(sourceUrl, title, typeUrl));
-//                                    crawlImagePage(typeUrl);
-                                }
-                            }
-                        }
-
-                        return Observable.just(albumList);
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<Album>>() {
-                    @Override
-                    public void accept(List<Album> albumList) throws Exception {
-                        Log.d("test", "accept: "+albumList.size());
-                        mAlbums.clear();
-                        mAlbums.addAll(albumList);
-                        mAlbumAdapter.notifyDataSetChanged();
-                    }
-                });
-    }
-
-    private String getAlbumImage(String href) throws IOException {
-        Document doc = Jsoup.connect(href)
-                .userAgent("Mozilla")
-                .get();
-        Elements photos = doc.select("div");
-        for (Element p : photos) {
-            if (p.attr("class").equals("photo")) {
-                //当前显示图片
-                String imageUrl = p.select("img").first().attr("src");
-                return imageUrl;
-//                Log.d("test", "url: "+imageUrl+", "+p.select("img").first().attr("alt"));
-            }
-        }
-        return "";
     }
 
     private void testJsoup() {

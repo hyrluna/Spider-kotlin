@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import lunax.spider.data.Album;
+import lunax.spider.data.dataitem.Album;
 import lunax.spider.data.SpiderRepository;
 
 /**
@@ -40,6 +40,11 @@ public class WallpaperPresenter implements WallpaperContract.Presenter {
                         mView.showAlbumsView(alba);
                     }
                 });
+    }
+
+    @Override
+    public void downloadWallpaper(String url) {
+        mView.showWallpaperDownloadSelectView(url);
     }
 
     @Override

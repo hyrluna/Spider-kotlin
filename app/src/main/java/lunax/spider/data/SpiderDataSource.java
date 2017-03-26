@@ -1,8 +1,7 @@
 package lunax.spider.data;
 
-import java.util.List;
-
 import io.reactivex.Observable;
+import lunax.spider.data.dataitem.Album;
 
 /**
  * Created by Bamboo on 3/14/2017.

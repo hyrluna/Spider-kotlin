@@ -1,11 +1,9 @@
 package lunax.spider.data.remote;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import lunax.spider.data.Album;
+import lunax.spider.data.dataitem.Album;
 import lunax.spider.data.SpiderDataSource;
 
 /**
