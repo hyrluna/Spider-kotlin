@@ -15,6 +15,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import java.util.List;
 
 import lunax.spider.R;
+import lunax.spider.common.SUtil;
 import lunax.spider.data.dataitem.Wallpaper;
 
 /**
@@ -62,7 +63,7 @@ public class WallpaperListAdapter extends RecyclerView.Adapter<WallpaperListAdap
             imgBtnDownload = (ImageButton) itemView.findViewById(R.id.download_button);
         }
 
-        public void bind(final Wallpaper wallpaper, Context context, final WallpaperContract.Presenter presenter) {
+        public void bind(final Wallpaper wallpaper, final Context context, final WallpaperContract.Presenter presenter) {
             Glide.with(context)
                     .load(wallpaper.getImgUrl())
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
@@ -74,7 +75,7 @@ public class WallpaperListAdapter extends RecyclerView.Adapter<WallpaperListAdap
             imgBtnDownload.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    presenter.downloadWallpaper(wallpaper.getHref());
+                    presenter.downloadWallpaper(wallpaper.getDownloadUrls());
                 }
             });
         }

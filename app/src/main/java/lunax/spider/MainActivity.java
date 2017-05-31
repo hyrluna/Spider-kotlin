@@ -1,6 +1,5 @@
 package lunax.spider;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -9,8 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +15,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import lunax.spider.homepage.HomeFragment;
-import lunax.spider.wallpaperpage.DaggerWallpaperComponent;
+import lunax.spider.homepage.HomePresenter;
+import lunax.spider.homepage.HomePresenterModule;
 import lunax.spider.wallpaperpage.WallpaperFragment;
 import lunax.spider.wallpaperpage.WallpaperPresenter;
 import lunax.spider.wallpaperpage.WallpaperPresenterModule;
@@ -29,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_WALLPAPER_FRAGMENT = "tag_wallpaper_fragment";
 
     private List<Fragment> fragments = new ArrayList<>();
+
+    @Inject
+    HomePresenter mHomePresenter;
 
     @Inject
     WallpaperPresenter mWallpaperPresenter;
@@ -85,11 +86,19 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        DaggerWallpaperComponent.builder()
+        DaggerMainComponent.builder()
                 .spiderRepositoryComponent(((SpiderApplication) getApplication()).getSpiderRepositoryComponent())
                 .wallpaperPresenterModule(new WallpaperPresenterModule(wpFragment))
+                .homePresenterModule(new HomePresenterModule(homeFragment))
                 .build()
                 .inject(this);
+
+//        DaggerHomeComponent.builder()
+//                .spiderRepositoryComponent(((SpiderApplication) getApplication()).getSpiderRepositoryComponent())
+//                .wallpaperPresenterModule(new HomePresenterModule(homeFragment))
+//                .build()
+//                .inject(this);
+
 
     }
 

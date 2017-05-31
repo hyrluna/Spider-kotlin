@@ -5,15 +5,22 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.jsoup.Jsoup;
@@ -35,6 +42,7 @@ import lunax.spider.common.SUtil;
 import lunax.spider.data.dataitem.Album;
 import lunax.spider.BaseFragment;
 import lunax.spider.R;
+import lunax.spider.data.dataitem.ImageSrc;
 import lunax.spider.data.remote.NetworkRequest;
 import lunax.spider.wallpaperlistpage.WallpaperListActivity;
 import lunax.spider.widget.Fab;
@@ -169,7 +177,14 @@ public class WallpaperFragment extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.loadAlbums(NetworkRequest.QUERY_TYPE_GIRL);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            mPresenter.loadAlbums(NetworkRequest.QUERY_TYPE_GIRL);
+        }
     }
 
     @Override
@@ -208,12 +223,18 @@ public class WallpaperFragment extends BaseFragment
     }
 
     @Override
-    public void showWallpaperDownloadSelectView(String url) {
-//        Intent intent = new Intent(parentActivity, WallpaperListActivity.class);
-//        intent.putExtra(WallpaperListActivity.EXTRA_IMAGE_LIST_URL, url);
-//        startActivity(intent);
-//        BottomSheetDialog dialog = new BottomSheetDialog(parentActivity);
-        SUtil.showToast(parentActivity, "download dialog");
+    public void showWallpaperDownloadSelectView(List<ImageSrc> urls) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
+        View v = parentActivity.getLayoutInflater().inflate(R.layout.item_dialog_img_src_list, null);
+        ListView listView = (ListView) v.findViewById(R.id.img_src_list);
+        listView.setAdapter(new ImageSrcAdapter(parentActivity, urls));
+        builder.setView(v);
+        builder.show();
+    }
+
+    @Override
+    public void showLoadingIndicator(boolean isShow) {
+        showProgressIndicator(isShow);
     }
 
     public void closePopSelector() {
@@ -222,6 +243,24 @@ public class WallpaperFragment extends BaseFragment
 
     public boolean isSelectorShow() {
         return popUpWindow.isShowing();
+    }
+
+    private class ImageSrcAdapter extends ArrayAdapter<ImageSrc> {
+        public ImageSrcAdapter(@NonNull Context context, List<ImageSrc> imageSrcs) {
+            super(context, 0, imageSrcs);
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            ImageSrc imageSrc = getItem(position);
+            if (convertView == null) {
+                convertView = parentActivity.getLayoutInflater().inflate(android.R.layout.simple_list_item_1, parent, false);
+            }
+            TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
+            tv.setText(imageSrc.getSize());
+            return convertView;
+        }
     }
 
     private int getStatusBarColor() {

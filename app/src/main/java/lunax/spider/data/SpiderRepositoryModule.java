@@ -17,17 +17,6 @@ import lunax.spider.data.remote.SpiderRemoteDataSource;
 @Module
 abstract class SpiderRepositoryModule {
 
-//    @Module
-//    interface SpiderRepositoryModuleBinds {
-//        @Singleton
-//        @Binds
-//        SpiderDataSource providerSpiderLocalData(Context context);
-//
-//        @Singleton
-//        @Binds
-//        SpiderDataSource providerSpiderRemoteData();
-//    }
-
     @Singleton
     @Binds
     abstract SpiderDataSource providerSpiderLocalData(SpiderLocalDataSource localDataSource);
@@ -36,15 +25,4 @@ abstract class SpiderRepositoryModule {
     @Binds
     abstract SpiderDataSource providerSpiderRemoteData(SpiderRemoteDataSource remoteDataSource);
 
-//    @Singleton
-//    @Provides
-//    SpiderLocalDataSource providerSpiderLocalData(Context context) {
-//        return new SpiderLocalDataSource(context);
-//    }
-//
-//    @Singleton
-//    @Provides
-//    SpiderRemoteDataSource providerSpiderRemoteData() {
-//        return new SpiderRemoteDataSource();
-//    }
 }

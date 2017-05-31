@@ -11,6 +11,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import lunax.spider.data.dataitem.Album;
 import lunax.spider.data.SpiderRepository;
+import lunax.spider.data.dataitem.ImageSrc;
 
 /**
  * Created by Bamboo on 3/13/2017.
@@ -30,6 +31,7 @@ public class WallpaperPresenter implements WallpaperContract.Presenter {
 
     @Override
     public void loadAlbums(String type) {
+        mView.showLoadingIndicator(true);
         mRepository.getAlbums(type)
                 .toList()
                 .subscribeOn(Schedulers.io())
@@ -37,14 +39,15 @@ public class WallpaperPresenter implements WallpaperContract.Presenter {
                 .subscribe(new Consumer<List<Album>>() {
                     @Override
                     public void accept(List<Album> alba) throws Exception {
+                        mView.showLoadingIndicator(false);
                         mView.showAlbumsView(alba);
                     }
                 });
     }
 
     @Override
-    public void downloadWallpaper(String url) {
-        mView.showWallpaperDownloadSelectView(url);
+    public void downloadWallpaper(List<ImageSrc> imageSrcs) {
+        mView.showWallpaperDownloadSelectView(imageSrcs);
     }
 
     @Override

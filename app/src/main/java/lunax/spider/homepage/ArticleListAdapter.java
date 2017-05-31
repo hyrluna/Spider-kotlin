@@ -1,0 +1,79 @@
+package lunax.spider.homepage;
+
+import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
+import java.util.List;
+
+import lunax.spider.R;
+import lunax.spider.data.dataitem.Article;
+
+/**
+ * Created by G1494458 on 2017/5/31.
+ */
+
+public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.ArticleViewHolder> {
+
+    private List<Article> mArticles;
+    private Context mContext;
+
+    public ArticleListAdapter(List<Article> articles, Context context) {
+        this.mArticles = articles;
+        mContext = context;
+    }
+
+    @Override
+    public ArticleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View v = inflater.inflate(R.layout.item_article, parent, false);
+        return new ArticleViewHolder(v);
+    }
+
+    @Override
+    public void onBindViewHolder(ArticleViewHolder holder, int position) {
+        holder.bind(mArticles.get(position), mContext);
+    }
+
+    @Override
+    public int getItemCount() {
+        return mArticles != null ? mArticles.size() : 0;
+    }
+
+    public static class ArticleViewHolder extends RecyclerView.ViewHolder {
+
+        ImageView imgvAvatar;
+        TextView tvTitle;
+        TextView tvSubtitle;
+        TextView tvDesc;
+
+        public ArticleViewHolder(View itemView) {
+            super(itemView);
+            imgvAvatar = (ImageView) itemView.findViewById(R.id.avatar);
+            tvTitle = (TextView) itemView.findViewById(R.id.article_title);
+            tvSubtitle = (TextView) itemView.findViewById(R.id.subtitle);
+            tvDesc = (TextView) itemView.findViewById(R.id.desc);
+        }
+
+        public void bind(Article article, Context context) {
+            Log.d("test", "avatar = "+article.getAvatar());
+            Glide.with(context)
+                    .load(article.getAvatar())
+                    .skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .into(imgvAvatar);
+            tvTitle.setText(article.getTitle());
+            tvSubtitle.setText(article.getSubtitle());
+            tvTitle.setText(article.getTitle());
+            tvDesc.setText(article.getDescription());
+        }
+    }
+}
