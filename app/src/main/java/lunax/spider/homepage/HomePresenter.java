@@ -1,5 +1,7 @@
 package lunax.spider.homepage;
 
+import android.widget.ImageView;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -43,5 +45,10 @@ public class HomePresenter implements HomeContract.Presenter {
     @Override
     public void start() {
 
+    }
+
+    @Override
+    public void loadArticleDetail(Article article, ImageView v) {
+        mView.showArticleDetail(article, v);
     }
 }

@@ -2,7 +2,6 @@ package lunax.spider.homepage;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,10 +24,12 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
 
     private List<Article> mArticles;
     private Context mContext;
+    private HomeContract.Presenter mPresenter;
 
-    public ArticleListAdapter(List<Article> articles, Context context) {
+    public ArticleListAdapter(List<Article> articles, Context context, HomeContract.Presenter presenter) {
         this.mArticles = articles;
         mContext = context;
+        mPresenter = presenter;
     }
 
     @Override
@@ -40,7 +41,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
 
     @Override
     public void onBindViewHolder(ArticleViewHolder holder, int position) {
-        holder.bind(mArticles.get(position), mContext);
+        holder.bind(mArticles.get(position), mContext, mPresenter);
     }
 
     @Override
@@ -63,17 +64,22 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
             tvDesc = (TextView) itemView.findViewById(R.id.desc);
         }
 
-        public void bind(Article article, Context context) {
-            Log.d("test", "avatar = "+article.getAvatar());
+        public void bind(final Article article, Context context, final HomeContract.Presenter presenter) {
             Glide.with(context)
                     .load(article.getAvatar())
                     .skipMemoryCache(true)
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(imgvAvatar);
             tvTitle.setText(article.getTitle());
             tvSubtitle.setText(article.getSubtitle());
             tvTitle.setText(article.getTitle());
             tvDesc.setText(article.getDescription());
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    presenter.loadArticleDetail(article, imgvAvatar);
+                }
+            });
         }
     }
 }

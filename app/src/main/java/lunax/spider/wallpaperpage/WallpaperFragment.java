@@ -44,7 +44,6 @@ import lunax.spider.BaseFragment;
 import lunax.spider.R;
 import lunax.spider.data.dataitem.ImageSrc;
 import lunax.spider.data.remote.NetworkRequest;
-import lunax.spider.wallpaperlistpage.WallpaperListActivity;
 import lunax.spider.widget.Fab;
 import lunax.spider.widget.MaterialSheetFab;
 import lunax.spider.widget.MaterialSheetFabEventListener;

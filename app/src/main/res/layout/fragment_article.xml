@@ -2,14 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="lunax.spider.homepage.HomeFragment">
+    tools:context="lunax.spider.articlepage.ArticleFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycleView"
+    <WebView
+        android:id="@+id/web_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
+    </WebView>
 
 </FrameLayout>

@@ -1,19 +1,27 @@
 package lunax.spider.homepage;
 
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import lunax.spider.BaseFragment;
 import lunax.spider.R;
+import lunax.spider.articlepage.ArticleActivity;
+import lunax.spider.common.TransitionHelper;
 import lunax.spider.data.dataitem.Article;
 
 /**
@@ -34,6 +42,7 @@ public class HomeFragment extends BaseFragment implements HomeContract.View {
     private RecyclerView mRecyclerView;
     private ArticleListAdapter mArticleListAdapter;
     private List<Article> mArticles = new ArrayList<>();
+    private HomeFragmentListener listener;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -73,8 +82,15 @@ public class HomeFragment extends BaseFragment implements HomeContract.View {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recycleView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(parentActivity));
+        mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                listener.onScroll(event);
+                return false;
+            }
+        });
 
-        mArticleListAdapter = new ArticleListAdapter(mArticles, parentActivity);
+        mArticleListAdapter = new ArticleListAdapter(mArticles, parentActivity, mPresenter);
         mRecyclerView.setAdapter(mArticleListAdapter);
         return v;
     }
@@ -88,6 +104,22 @@ public class HomeFragment extends BaseFragment implements HomeContract.View {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof HomeFragmentListener) {
+            listener = (HomeFragmentListener) context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if (listener != null) {
+            listener = null;
+        }
+    }
+
+    @Override
     public void showArticlesView(List<Article> articles) {
         mArticles.clear();
         mArticles.addAll(articles);
@@ -95,7 +127,21 @@ public class HomeFragment extends BaseFragment implements HomeContract.View {
     }
 
     @Override
+    public void showArticleDetail(Article article, ImageView v) {
+        final Pair<View, String>[] pairs = TransitionHelper.createSafeTransitionParticipants(parentActivity, false,
+                new Pair<>(v, getString(R.string.transition_avatar)));
+        ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(parentActivity, pairs);
+        Intent intent = new Intent(parentActivity, ArticleActivity.class);
+        intent.putExtra(ArticleActivity.EXTRA_ARTICLE, article);
+        startActivity(intent, transitionActivityOptions.toBundle());
+    }
+
+    @Override
     public void setPresenter(HomeContract.Presenter presenter) {
         mPresenter = presenter;
+    }
+
+    public interface HomeFragmentListener {
+        void onScroll(MotionEvent event);
     }
 }

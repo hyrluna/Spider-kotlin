@@ -1,6 +1,7 @@
 package lunax.spider.data;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import lunax.spider.data.dataitem.Album;
@@ -12,6 +13,7 @@ import lunax.spider.data.remote.SpiderRemoteDataSource;
  * Created by Bamboo on 3/13/2017.
  */
 
+@Singleton
 public class SpiderRepository implements SpiderDataSource {
 
     private SpiderLocalDataSource mSpiderLocalDataSource;

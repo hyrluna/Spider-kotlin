@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".TypeImageActivity" />
-        <activity android:name=".wallpaperlistpage.WallpaperListActivity"></activity>
+        <activity android:name=".articlepage.ArticleActivity"/>
     </application>
 
 </manifest>

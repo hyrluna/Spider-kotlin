@@ -16,9 +16,9 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 import lunax.spider.data.dataitem.Album;
 import lunax.spider.data.dataitem.Article;
+import lunax.spider.data.dataitem.ArticleCover;
 import lunax.spider.data.dataitem.ImageSrc;
 import lunax.spider.data.dataitem.Wallpaper;
 
@@ -31,7 +31,8 @@ public class NetworkRequest {
     private static final String TAG = "NetworkRequest";
     private static final String WALLPAPER_BASE_URL = "http://download.pchome.net/wallpaper/";
     public static final String QUERY_TYPE_GIRL = "meinv/";
-    public static final String ARTICLE_URL = "https://read.douban.com/kind/501?sort=hot&promotion_only=False&min_price=0&works_type=None&max_price=0";
+    public static final String ARTICLE_HOST = "read.douban.com";
+    public static final String ARTICLE_URL = "https://" + ARTICLE_HOST + "/kind/501?sort=hot&promotion_only=False&min_price=0&works_type=None&max_price=0";
 
     @Inject
     public NetworkRequest() {
@@ -154,6 +155,27 @@ public class NetworkRequest {
                         String desc = descEl.text();
                         Log.d("test", "get article: "+title+", "+articleUrl);
                         return Observable.just(new Article(avatar, title, subTitle, author, type, rating, desc, articleUrl));
+                    }
+                });
+    }
+
+    public Observable<ArticleCover> getArticleCover(String url) {
+        return Observable.just(url)
+                .flatMap(new Function<String, ObservableSource<ArticleCover>>() {
+                    @Override
+                    public ObservableSource<ArticleCover> apply(String s) throws Exception {
+                        Document doc = Jsoup.connect(s)
+                                .userAgent("Mozilla")
+                                .get();
+                        Element e = doc.select("article.app-article").first();
+                        String wordCount = e.select("span.labeled-text").get(2).text();
+                        String intro = e.select("div.info").first().select("p").first().text();
+                        String hotMark = "";
+                        Element tmpe1 = e.select("div.popular-annotations").first();
+                        if (tmpe1!= null) {
+                            hotMark = tmpe1.select("ol").first().toString();
+                        }
+                        return Observable.just(new ArticleCover(wordCount, intro, hotMark));
                     }
                 });
     }

@@ -3,7 +3,6 @@ package lunax.spider;
 import android.app.Application;
 
 import lunax.spider.data.DaggerSpiderRepositoryComponent;
-import lunax.spider.data.SpiderRepository;
 import lunax.spider.data.SpiderRepositoryComponent;
 
 /**
@@ -17,7 +16,7 @@ public class SpiderApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mSpiderRepositoryComponent = DaggerSpiderRepositoryComponent.builder()
-                .applicationModule(new ApplicationModule(this))
+                .applicationModule(new ApplicationModule(getApplicationContext()))
                 .build();
 
     }
