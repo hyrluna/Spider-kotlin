@@ -69,7 +69,7 @@ public class ArticleFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_article, container, false);
-        WebView webView = (WebView) v.findViewById(R.id.web_view);
+        webView = (WebView) v.findViewById(R.id.web_view);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webView.setWebViewClient(new ArticleClient());

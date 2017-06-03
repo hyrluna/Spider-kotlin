@@ -121,6 +121,7 @@ public class HomeFragment extends BaseFragment implements HomeContract.View {
 
     @Override
     public void showArticlesView(List<Article> articles) {
+        swipeRefreshLayout.setRefreshing(false);
         mArticles.clear();
         mArticles.addAll(articles);
         mArticleListAdapter.notifyDataSetChanged();
@@ -139,6 +140,12 @@ public class HomeFragment extends BaseFragment implements HomeContract.View {
     @Override
     public void setPresenter(HomeContract.Presenter presenter) {
         mPresenter = presenter;
+    }
+
+    @Override
+    public void onRefresh() {
+        mPresenter.setRefresh(true);
+        mPresenter.loadArticles("", "");
     }
 
     public interface HomeFragmentListener {

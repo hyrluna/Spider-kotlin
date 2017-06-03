@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -55,6 +56,8 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
         TextView tvTitle;
         TextView tvSubtitle;
         TextView tvDesc;
+        TextView tvAuthor;
+        RatingBar ratingBar;
 
         public ArticleViewHolder(View itemView) {
             super(itemView);
@@ -62,6 +65,8 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
             tvTitle = (TextView) itemView.findViewById(R.id.article_title);
             tvSubtitle = (TextView) itemView.findViewById(R.id.subtitle);
             tvDesc = (TextView) itemView.findViewById(R.id.desc);
+            tvAuthor = (TextView) itemView.findViewById(R.id.author);
+            ratingBar = (RatingBar) itemView.findViewById(R.id.ratingBar);
         }
 
         public void bind(final Article article, Context context, final HomeContract.Presenter presenter) {
@@ -69,11 +74,14 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
                     .load(article.getAvatar())
                     .skipMemoryCache(true)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .centerCrop()
                     .into(imgvAvatar);
             tvTitle.setText(article.getTitle());
             tvSubtitle.setText(article.getSubtitle());
             tvTitle.setText(article.getTitle());
             tvDesc.setText(article.getDescription());
+            tvAuthor.setText(article.getAuthor());
+            ratingBar.setRating(Float.parseFloat(article.getRating()) / 2);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

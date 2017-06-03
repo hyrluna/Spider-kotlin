@@ -18,14 +18,15 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:layout_scrollFlags="scroll|enterAlways|snap" />
+            app:layout_scrollFlags="scroll|enterAlways" />
     </android.support.design.widget.AppBarLayout>
+
 
     <FrameLayout
         android:id="@+id/content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     </FrameLayout>
 
@@ -34,6 +35,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        app:layout_anchor="@id/content"
+        app:layout_anchorGravity="bottom"
+        app:layout_behavior="lunax.spider.widget.BottomNavigationBehavior"
         android:background="?android:attr/windowBackground"
         app:menu="@menu/navigation" />
 

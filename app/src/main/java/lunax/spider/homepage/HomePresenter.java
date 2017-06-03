@@ -43,8 +43,8 @@ public class HomePresenter implements HomeContract.Presenter {
     }
 
     @Override
-    public void start() {
-
+    public void setRefresh(boolean isRefresh) {
+        mRepository.setNeedRefresh(isRefresh);
     }
 
     @Override

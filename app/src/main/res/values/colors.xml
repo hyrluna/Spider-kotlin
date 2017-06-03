@@ -9,4 +9,8 @@
     <color name="text_white_87">#deFFFFFF</color>
     <color name="background_card">#fff</color>
     <color name="theme_accent">#FFEB3B</color>
+    <color name="article_card_background">#acc9ef</color>
+    <color name="shape_normal">#bbadd8</color>
+    <color name="shape_pressed">#d398a8</color>
+    <color name="stroke">#ccd297</color>
 </resources>

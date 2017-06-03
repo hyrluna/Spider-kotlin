@@ -51,8 +51,8 @@ public class WallpaperPresenter implements WallpaperContract.Presenter {
     }
 
     @Override
-    public void start() {
-
+    public void setRefresh(boolean isRefresh) {
+        mRepository.setNeedRefresh(isRefresh);
     }
 
     public void test() {

@@ -7,6 +7,11 @@ package lunax.spider.data.dataitem;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Keep;
+import org.greenrobot.greendao.annotation.Generated;
+
 /**
  * var avatar: String,
  var title: String,
@@ -18,7 +23,14 @@ import android.os.Parcelable;
  var articleUrl: String
  */
 
+@Entity
 public class Article implements Parcelable {
+
+    @Id(autoincrement = true)
+    private long id;
+
+    private String kind;
+
     private String avatar;
     private String title;
     private String subtitle;
@@ -28,10 +40,47 @@ public class Article implements Parcelable {
     private String description;
     private String articleUrl;
 
+    @Keep
     public Article() {
     }
 
+    @Keep
+    public Article(long id,
+                   String avatar,
+                   String title,
+                   String subtitle,
+                   String author,
+                   String type,
+                   String rating,
+                   String description,
+                   String articleUrl) {
+        this.id = id;
+        this.avatar = avatar;
+        this.title = title;
+        this.subtitle = subtitle;
+        this.author = author;
+        this.type = type;
+        this.rating = rating;
+        this.description = description;
+        this.articleUrl = articleUrl;
+    }
+
     public Article(String avatar, String title, String subtitle, String author, String type, String rating, String description, String articleUrl) {
+        this.avatar = avatar;
+        this.title = title;
+        this.subtitle = subtitle;
+        this.author = author;
+        this.type = type;
+        this.rating = rating;
+        this.description = description;
+        this.articleUrl = articleUrl;
+    }
+
+    @Generated(hash = 1041464052)
+    public Article(long id, String kind, String avatar, String title, String subtitle, String author, String type, String rating, String description,
+            String articleUrl) {
+        this.id = id;
+        this.kind = kind;
         this.avatar = avatar;
         this.title = title;
         this.subtitle = subtitle;
@@ -79,6 +128,22 @@ public class Article implements Parcelable {
             return new Article[size];
         }
     };
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
 
     public String getAvatar() {
         return avatar;

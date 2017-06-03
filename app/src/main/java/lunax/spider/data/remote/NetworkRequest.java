@@ -30,7 +30,7 @@ public class NetworkRequest {
 
     private static final String TAG = "NetworkRequest";
     private static final String WALLPAPER_BASE_URL = "http://download.pchome.net/wallpaper/";
-    public static final String QUERY_TYPE_GIRL = "meinv/";
+    public static final String QUERY_TYPE_GIRL = "meinv";
     public static final String ARTICLE_HOST = "read.douban.com";
     public static final String ARTICLE_URL = "https://" + ARTICLE_HOST + "/kind/501?sort=hot&promotion_only=False&min_price=0&works_type=None&max_price=0";
 
@@ -40,7 +40,7 @@ public class NetworkRequest {
     }
 
     public Observable<Album> getWallpaperTypeUrls(String type) {
-        return Observable.just(WALLPAPER_BASE_URL + type)
+        return Observable.just(WALLPAPER_BASE_URL + type + "/")
                 .flatMap(new Function<String, ObservableSource<Element>>() {
                     @Override
                     public ObservableSource<Element> apply(String url) throws Exception {
@@ -48,6 +48,9 @@ public class NetworkRequest {
                                 .userAgent("Mozilla")
                                 .get();
                         Elements uls = doc.select("li.photo-list-padding");
+                        uls.remove(17);
+                        uls.remove(16);
+                        uls.remove(15);
                         return Observable.fromIterable(uls);
                     }
                 })

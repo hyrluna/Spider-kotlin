@@ -48,17 +48,8 @@ import lunax.spider.widget.Fab;
 import lunax.spider.widget.MaterialSheetFab;
 import lunax.spider.widget.MaterialSheetFabEventListener;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link WallpaperFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link WallpaperFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class WallpaperFragment extends BaseFragment
-        implements WallpaperContract.View, View.OnClickListener {
+        implements WallpaperContract.View/*, View.OnClickListener*/ {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -71,11 +62,13 @@ public class WallpaperFragment extends BaseFragment
     boolean isClicked = true;
     private int statusBarColor;
 
-    private PopupWindow popUpWindow;
-    private MaterialSheetFab materialSheetFab;
+//    private PopupWindow popUpWindow;
+//    private MaterialSheetFab materialSheetFab;
 //    private FloatingActionButton btnImgSerch;
     private RecyclerView recyclerView;
     private WallpaperAlbumAdapter mAlbumAdapter;
+
+//    private WallpaperFragListener mListener;
 
     private WallpaperContract.Presenter mPresenter;
 
@@ -112,47 +105,47 @@ public class WallpaperFragment extends BaseFragment
         final View mainLayout = v.findViewById(R.id.wallpaper_fragment);
         recyclerView = (RecyclerView) v.findViewById(R.id.recycleView);
 //        btnImgSerch = (FloatingActionButton) v.findViewById(R.id.image_search_button);
-        popUpWindow = new PopupWindow(parentActivity);
+//        popUpWindow = new PopupWindow(parentActivity);
 
-        View popSelectorView = inflater.inflate(R.layout.selector_tag_cloud, null);
-        popUpWindow.setContentView(popSelectorView);
+//        View popSelectorView = inflater.inflate(R.layout.selector_tag_cloud, null);
+//        popUpWindow.setContentView(popSelectorView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(parentActivity));
         mAlbums = new ArrayList<>();
         mAlbumAdapter = new WallpaperAlbumAdapter(mAlbums, parentActivity, mPresenter);
         recyclerView.setAdapter(mAlbumAdapter);
 
-        Fab fab = (Fab) v.findViewById(R.id.fab);
-        View sheetView = v.findViewById(R.id.fab_sheet);
-        View overlay = v.findViewById(R.id.overlay);
-        int sheetColor = getResources().getColor(R.color.background_card);
-        int fabColor = getResources().getColor(R.color.theme_accent);
-
-        // Create material sheet FAB
-        materialSheetFab = new MaterialSheetFab<>(fab, sheetView, overlay, sheetColor, fabColor);
-
-        // Set material sheet event listener
-        materialSheetFab.setEventListener(new MaterialSheetFabEventListener() {
-            @Override
-            public void onShowSheet() {
-                // Save current status bar color
-                statusBarColor = getStatusBarColor();
-                // Set darker status bar color to match the dim overlay
-                setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
-            }
-
-            @Override
-            public void onHideSheet() {
-                // Restore status bar color
-                setStatusBarColor(statusBarColor);
-            }
-        });
-
-        // Set material sheet item click listeners
-        v.findViewById(R.id.fab_sheet_item_recording).setOnClickListener(this);
-        v.findViewById(R.id.fab_sheet_item_reminder).setOnClickListener(this);
-        v.findViewById(R.id.fab_sheet_item_photo).setOnClickListener(this);
-        v.findViewById(R.id.fab_sheet_item_note).setOnClickListener(this);
+//        Fab fab = (Fab) v.findViewById(R.id.fab);
+//        View sheetView = v.findViewById(R.id.fab_sheet);
+//        View overlay = v.findViewById(R.id.overlay);
+//        int sheetColor = getResources().getColor(R.color.background_card);
+//        int fabColor = getResources().getColor(R.color.theme_accent);
+//
+//        // Create material sheet FAB
+//        materialSheetFab = new MaterialSheetFab<>(fab, sheetView, overlay, sheetColor, fabColor);
+//
+//        // Set material sheet event listener
+//        materialSheetFab.setEventListener(new MaterialSheetFabEventListener() {
+//            @Override
+//            public void onShowSheet() {
+//                // Save current status bar color
+//                statusBarColor = getStatusBarColor();
+//                // Set darker status bar color to match the dim overlay
+//                setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+//            }
+//
+//            @Override
+//            public void onHideSheet() {
+//                // Restore status bar color
+//                setStatusBarColor(statusBarColor);
+//            }
+//        });
+//
+//        // Set material sheet item click listeners
+//        v.findViewById(R.id.fab_sheet_item_recording).setOnClickListener(this);
+//        v.findViewById(R.id.fab_sheet_item_reminder).setOnClickListener(this);
+//        v.findViewById(R.id.fab_sheet_item_photo).setOnClickListener(this);
+//        v.findViewById(R.id.fab_sheet_item_note).setOnClickListener(this);
 
 //        btnImgSerch.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -189,11 +182,11 @@ public class WallpaperFragment extends BaseFragment
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
+//        if (context instanceof WallpaperFragListener) {
+//            mListener = (WallpaperFragListener) context;
 //        } else {
 //            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
+//                    + " must implement WallpaperFragListener");
 //        }
     }
 
@@ -203,11 +196,11 @@ public class WallpaperFragment extends BaseFragment
 //        mListener = null;
     }
 
-    @Override
-    public void onClick(View v) {
-        Toast.makeText(parentActivity, R.string.sheet_item_pressed, Toast.LENGTH_SHORT).show();
-        materialSheetFab.hideSheet();
-    }
+//    @Override
+//    public void onClick(View v) {
+//        Toast.makeText(parentActivity, R.string.sheet_item_pressed, Toast.LENGTH_SHORT).show();
+//        materialSheetFab.hideSheet();
+//    }
 
     @Override
     public void setPresenter(WallpaperContract.Presenter presenter) {
@@ -216,6 +209,7 @@ public class WallpaperFragment extends BaseFragment
 
     @Override
     public void showAlbumsView(List<Album> albums) {
+        swipeRefreshLayout.setRefreshing(false);
         mAlbums.clear();
         mAlbums.addAll(albums);
         mAlbumAdapter.notifyDataSetChanged();
@@ -236,13 +230,19 @@ public class WallpaperFragment extends BaseFragment
         showProgressIndicator(isShow);
     }
 
-    public void closePopSelector() {
-        popUpWindow.dismiss();
+    @Override
+    public void onRefresh() {
+        mPresenter.setRefresh(true);
+        mPresenter.loadAlbums(NetworkRequest.QUERY_TYPE_GIRL);
     }
 
-    public boolean isSelectorShow() {
-        return popUpWindow.isShowing();
-    }
+//    public void closePopSelector() {
+//        popUpWindow.dismiss();
+//    }
+
+//    public boolean isSelectorShow() {
+//        return popUpWindow.isShowing();
+//    }
 
     private class ImageSrcAdapter extends ArrayAdapter<ImageSrc> {
         public ImageSrcAdapter(@NonNull Context context, List<ImageSrc> imageSrcs) {
@@ -275,85 +275,5 @@ public class WallpaperFragment extends BaseFragment
         }
     }
 
-    private void testJsoup() {
 
-        Observable.just("http://download.pchome.net/wallpaper/meinv/")
-                .subscribeOn(Schedulers.io())
-                .flatMap(new Function<String, ObservableSource<String>>() {
-                    @Override
-                    public ObservableSource<String> apply(String s) throws Exception {
-                        crawlTypePage(s);
-                        return Observable.just(s);
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<String>() {
-                    @Override
-                    public void accept(String s) throws Exception {
-                        Log.d("test", "accept: "+s);
-                    }
-                });
-
-    }
-
-    public void crawlTypePage(String url) throws IOException {
-        Document doc = Jsoup.connect(url)
-                .userAgent("Mozilla")
-                .get();
-        Log.d("test", "connected");
-        Elements uls = doc.select("ul");
-        for (Element e : uls) {
-            if (e.attr("class").equals("pic-list2 clearfix")) {
-                Elements links = e.select("a");
-                for (Element link : links) {
-                    String typeUrl = link.absUrl("href");
-                    Log.d("test", "banner url: "+link.absUrl("href"));
-                    crawlImagePage(typeUrl);
-                }
-            }
-        }
-    }
-
-    public void crawlImagePage(String url) throws IOException {
-        Document doc = Jsoup.connect(url)
-                .userAgent("Mozilla")
-                .get();
-        Elements photos = doc.select("div");
-        for (Element p : photos) {
-            if (p.attr("class").equals("photo")) {
-                //当前显示图片
-                String imageUrl = p.select("img").first().attr("src");
-//                Log.d("test", "url: "+imageUrl+", "+p.select("img").first().attr("alt"));
-            }
-        }
-        Elements eImgs = doc.select("dd");
-        for (Element eImg : eImgs) {
-            if (eImg.attr("id").equals("tagfbl")) {
-                Elements imgSizeEls = eImg.select("a");
-                for (Element imgSizeEl : imgSizeEls) {
-                    //当前图片可选的尺寸列表
-                    String imageSizeUrl = imgSizeEl.absUrl("href");
-                    String sizeTxt = imgSizeEl.attr("id");
-//                    Log.d("test", "url: "+imageSizeUrl+", "+sizeTxt);
-                }
-            }
-        }
-        //抓取一组图片的列表
-        List<String> hrefs = new ArrayList<>();
-        Elements uls = doc.select("ul");
-        for (Element ul : uls) {
-            if (ul.attr("id").equals("showImg")) {
-                Elements imgELs = ul.select("a");
-                for (Element imgEl : imgELs) {
-                    hrefs.add(imgEl.absUrl("href"));
-                    Log.d("test", "img url: "+imgEl.absUrl("href"));
-                }
-            }
-        }
-    }
-
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }

@@ -18,6 +18,6 @@ package lunax.spider;
 
 public interface BasePresenter {
 
-    void start();
+    void setRefresh(boolean isRefresh);
 
 }
