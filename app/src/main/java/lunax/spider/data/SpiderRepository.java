@@ -1,5 +1,9 @@
 package lunax.spider.data;
 
+import android.util.Log;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -7,6 +11,8 @@ import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
 import lunax.spider.data.dataitem.Album;
@@ -142,5 +148,19 @@ public class SpiderRepository implements SpiderDataSource {
 
     public void setNeedRefresh(boolean needRefresh) {
         this.needRefresh = needRefresh;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Observable<String> getTestData() {
+        Repository.Builder<String> builder = Repository.builder();
+
+        return builder
+                .local(mSpiderLocalDataSource)
+                .remote(mSpiderRemoteDataSource)
+                .methodArguments(null)
+                .method("getTestData", null)
+                .loadFromLocal(true)
+                .build();
     }
 }

@@ -154,7 +154,13 @@ public class NetworkRequest {
                         }
                         String author = authorEl.text();
                         String authorUrl = authorEl.absUrl("href");
-                        String rating = element.select("span.rating-average").first().text();
+                        Element e = element.select("span.rating-average").first();
+                        String rating;
+                        if (e == null) {
+                            rating = "0";
+                        } else {
+                            rating = e.text();
+                        }
                         String desc = descEl.text();
                         Log.d("test", "get article: "+title+", "+articleUrl);
                         return Observable.just(new Article(avatar, title, subTitle, author, type, rating, desc, articleUrl));

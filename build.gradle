@@ -7,7 +7,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.2'
+        classpath 'com.android.tools.build:gradle:2.3.3'
 
         // Better IDE support for annotations (so Android Studio interacts better with Dagger)
 //        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'

@@ -133,6 +133,7 @@ public class MainActivity extends BaseActivity
                 .inject(this);
 
         mHomePresenter.setRefresh(true);
+
     }
 
     @Override

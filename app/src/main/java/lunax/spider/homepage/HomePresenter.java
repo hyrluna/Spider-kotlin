@@ -1,5 +1,6 @@
 package lunax.spider.homepage;
 
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.util.List;
@@ -26,6 +27,14 @@ public class HomePresenter implements HomeContract.Presenter {
         this.mRepository = mRepository;
         this.mView = mView;
         mView.setPresenter(this);
+
+        //测试
+        mRepository.getTestData().subscribe(new Consumer<String>() {
+            @Override
+            public void accept(String s) throws Exception {
+                Log.d("test", "hello "+s);
+            }
+        });
     }
 
     @Override
