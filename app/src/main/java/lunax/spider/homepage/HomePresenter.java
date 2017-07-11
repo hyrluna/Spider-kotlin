@@ -1,6 +1,5 @@
 package lunax.spider.homepage;
 
-import android.util.Log;
 import android.widget.ImageView;
 
 import java.util.List;
@@ -27,26 +26,22 @@ public class HomePresenter implements HomeContract.Presenter {
         this.mRepository = mRepository;
         this.mView = mView;
         mView.setPresenter(this);
-
-        //测试
-        mRepository.getTestData().subscribe(new Consumer<String>() {
-            @Override
-            public void accept(String s) throws Exception {
-                Log.d("test", "hello "+s);
-            }
-        });
     }
 
     @Override
-    public void loadArticles(String fold, String subfold) {
-        mRepository.getArticles(fold, subfold)
+    public void loadArticles(String fold, final String start) {
+        mRepository.getArticles(fold, start)
                 .toList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<Article>>() {
                     @Override
                     public void accept(List<Article> articles) throws Exception {
-                        mView.showArticlesView(articles);
+                        if (Integer.parseInt(start) > 0) {
+                            mView.showMoreArticles(articles);
+                        } else {
+                            mView.showArticlesView(articles);
+                        }
                     }
                 });
     }

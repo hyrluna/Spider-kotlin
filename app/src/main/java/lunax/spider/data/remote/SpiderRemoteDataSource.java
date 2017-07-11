@@ -2,7 +2,6 @@ package lunax.spider.data.remote;
 
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 
 import java.util.List;
 
@@ -62,10 +61,5 @@ public class SpiderRemoteDataSource implements SpiderDataSource {
     @Override
     public void saveArticleCovers(ArticleCover articleCover, String articleTitle) {
 
-    }
-
-    @Override
-    public Observable<String> getTestData() {
-        return Observable.just("remote");
     }
 }

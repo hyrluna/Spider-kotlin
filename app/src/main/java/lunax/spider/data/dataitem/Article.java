@@ -27,7 +27,7 @@ import org.greenrobot.greendao.annotation.Generated;
 public class Article implements Parcelable {
 
     @Id(autoincrement = true)
-    private long id;
+    private Long id;
 
     private String kind;
 
@@ -39,46 +39,27 @@ public class Article implements Parcelable {
     private String rating;
     private String description;
     private String articleUrl;
+    private int pageCount;
 
     @Keep
     public Article() {
     }
 
+    public Article(String avatar, String title, String subtitle, String author, String type, String rating, String description, String articleUrl, int pageCount) {
+        this.avatar = avatar;
+        this.title = title;
+        this.subtitle = subtitle;
+        this.author = author;
+        this.type = type;
+        this.rating = rating;
+        this.description = description;
+        this.articleUrl = articleUrl;
+        this.pageCount = pageCount;
+    }
+
     @Keep
-    public Article(long id,
-                   String avatar,
-                   String title,
-                   String subtitle,
-                   String author,
-                   String type,
-                   String rating,
-                   String description,
-                   String articleUrl) {
-        this.id = id;
-        this.avatar = avatar;
-        this.title = title;
-        this.subtitle = subtitle;
-        this.author = author;
-        this.type = type;
-        this.rating = rating;
-        this.description = description;
-        this.articleUrl = articleUrl;
-    }
-
-    public Article(String avatar, String title, String subtitle, String author, String type, String rating, String description, String articleUrl) {
-        this.avatar = avatar;
-        this.title = title;
-        this.subtitle = subtitle;
-        this.author = author;
-        this.type = type;
-        this.rating = rating;
-        this.description = description;
-        this.articleUrl = articleUrl;
-    }
-
-    @Generated(hash = 1041464052)
-    public Article(long id, String kind, String avatar, String title, String subtitle, String author, String type, String rating, String description,
-            String articleUrl) {
+    public Article(Long id, String kind, String avatar, String title, String subtitle, String author, String type, String rating, String description,
+            String articleUrl, int pageCount) {
         this.id = id;
         this.kind = kind;
         this.avatar = avatar;
@@ -89,6 +70,7 @@ public class Article implements Parcelable {
         this.rating = rating;
         this.description = description;
         this.articleUrl = articleUrl;
+        this.pageCount = pageCount;
     }
 
     @Override
@@ -106,6 +88,7 @@ public class Article implements Parcelable {
         dest.writeString(rating);
         dest.writeString(description);
         dest.writeString(articleUrl);
+        dest.writeInt(pageCount);
     }
 
     public static final Parcelable.Creator<Article> CREATOR = new Creator<Article>() {
@@ -120,6 +103,7 @@ public class Article implements Parcelable {
             article.rating = source.readString();
             article.description = source.readString();
             article.articleUrl = source.readString();
+            article.pageCount = source.readInt();
             return article;
         }
 
@@ -129,12 +113,8 @@ public class Article implements Parcelable {
         }
     };
 
-    public long getId() {
+    public Long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getKind() {
@@ -207,5 +187,17 @@ public class Article implements Parcelable {
 
     public void setArticleUrl(String articleUrl) {
         this.articleUrl = articleUrl;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public int getPageCount() {
+        return pageCount;
+    }
+
+    public void setPageCount(int pageCount) {
+        this.pageCount = pageCount;
     }
 }

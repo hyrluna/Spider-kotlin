@@ -21,5 +21,6 @@ public interface HomeContract {
     interface View extends BaseView<Presenter> {
         void showArticlesView(List<Article> articles);
         void showArticleDetail(Article article, ImageView avatar);
+        void showMoreArticles(List<Article> articles);
     }
 }

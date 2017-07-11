@@ -32,6 +32,38 @@ public class NetworkRequest {
     private static final String WALLPAPER_BASE_URL = "http://download.pchome.net/wallpaper/";
     public static final String QUERY_TYPE_GIRL = "meinv";
     public static final String ARTICLE_HOST = "read.douban.com";
+    public static final String ARTICLE_TYPE_ALL_NOVEL = "500"; //爱情小说
+    public static final String ARTICLE_TYPE_LOVE = "501"; //爱情小说
+    public static final String ARTICLE_TYPE_QINGCHUN = "502"; //爱情小说
+    public static final String ARTICLE_TYPE_WENYI = "503"; //爱情小说
+    public static final String ARTICLE_TYPE_DUSHI = "504"; //爱情小说
+    public static final String ARTICLE_TYPE_KEHUAN = "505"; //爱情小说
+    public static final String ARTICLE_TYPE_HUANXIANG = "506"; //爱情小说
+    public static final String ARTICLE_TYPE_WUXIA = "507"; //爱情小说
+    public static final String ARTICLE_TYPE_XUANYI = "508"; //爱情小说
+    public static final String ARTICLE_TYPE_TUILI = "509"; //爱情小说
+    public static final String ARTICLE_TYPE_HISTORY = "510"; //爱情小说
+    public static final String ARTICLE_TYPE_GUXIANG = "511"; //故乡小说
+    public static final String ARTICLE_TYPE_HAIWAI = "512"; //爱情小说
+    public static final String ARTICLE_TYPE_ZHIYE = "513"; //爱情小说
+    public static final String ARTICLE_TYPE_XIJU = "514"; //爱情小说
+    public static final String ARTICLE_TYPE_TUHUA = "515"; //爱情小说
+    public static final String ARTICLE_TYPE_ALL_NO_NOVEL = "516"; //非小说
+    public static final String ARTICLE_TYPE_WENYI_SANWEN = "517"; //非小说
+    public static final String ARTICLE_TYPE_PINGLUN_SUIBI = "518"; //非小说
+    public static final String ARTICLE_TYPE_WENHUA = "519"; //非小说
+    public static final String ARTICLE_TYPE_LISHI_JISHI = "520"; //非小说
+    public static final String ARTICLE_TYPE_QINGGAN_CHENGZHANG = "521"; //非小说
+    public static final String ARTICLE_TYPE_LUXING_YOUJI = "522"; //非小说
+    public static final String ARTICLE_TYPE_SHENGHUO = "523"; //非小说
+    public static final String ARTICLE_TYPE_FENGSHANG = "524"; //非小说
+    public static final String ARTICLE_TYPE_KEPU = "525"; //非小说
+    public static final String ARTICLE_TYPE_HANGYE = "526"; //非小说
+    public static final String ARTICLE_TYPE_SHEYING = "527"; //非小说
+    public static final String ARTICLE_TYPE_MANHUA_HUIBEN = "528"; //非小说
+    public static final String ARTICLE_TYPE_SHEJI_YISHU = "529"; //非小说
+    public static final String ARTICLE_TYPE_SHIGE = "530"; //非小说
+    public static final String ARTICLE_TYPE_JUBEN = "531"; //非小说
     public static final String ARTICLE_URL = "https://" + ARTICLE_HOST + "/kind/501?sort=hot&promotion_only=False&min_price=0&works_type=None&max_price=0";
 
     @Inject
@@ -104,16 +136,31 @@ public class NetworkRequest {
         return doc.select("img[id=bigImg]").first().attr("src");
     }
 
-    public Observable<Article> getArticles(String fold, String subfold) {
-        return Observable.just(ARTICLE_URL)
+    int pageCount = 1;
+    public Observable<Article> getArticles(String type, String start) {
+        return Observable.just(createArticleURL(type, start))
                 .flatMap(new Function<String, ObservableSource<Element>>() {
                     @Override
                     public ObservableSource<Element> apply(String url) throws Exception {
                         Document doc = Jsoup.connect(url)
                                 .userAgent("Mozilla")
                                 .get();
-                        Elements uls = doc.select("li.store-item");
-                        return Observable.fromIterable(uls);
+                        Elements uls = doc.select("article.col");
+                        return Observable.just(uls.first());
+                    }
+                })
+                .flatMap(new Function<Element, ObservableSource<Element>>() {
+                    @Override
+                    public ObservableSource<Element> apply(Element element) throws Exception {
+                        Element e = element.select("div.pagination").first();
+                        pageCount = e.select("ul").first().select("li").size() - 2;
+                        return Observable.just(element);
+                    }
+                })
+                .flatMap(new Function<Element, ObservableSource<Element>>() {
+                    @Override
+                    public ObservableSource<Element> apply(Element element) throws Exception {
+                        return Observable.fromIterable(element.select("li.store-item"));
                     }
                 })
                 .flatMap(new Function<Element, ObservableSource<Article>>() {
@@ -155,15 +202,15 @@ public class NetworkRequest {
                         String author = authorEl.text();
                         String authorUrl = authorEl.absUrl("href");
                         Element e = element.select("span.rating-average").first();
-                        String rating;
-                        if (e == null) {
-                            rating = "0";
-                        } else {
+                        String rating = "";
+                        if (e != null) {
                             rating = e.text();
+                        } else {
+                            rating = "0";
                         }
                         String desc = descEl.text();
                         Log.d("test", "get article: "+title+", "+articleUrl);
-                        return Observable.just(new Article(avatar, title, subTitle, author, type, rating, desc, articleUrl));
+                        return Observable.just(new Article(avatar, title, subTitle, author, type, rating, desc, articleUrl, pageCount));
                     }
                 });
     }
@@ -187,5 +234,9 @@ public class NetworkRequest {
                         return Observable.just(new ArticleCover(wordCount, intro, hotMark));
                     }
                 });
+    }
+
+    private String createArticleURL(String type, String start) {
+        return "https://" + ARTICLE_HOST + "/kind/" + type + "?start="  + start +"&sort=hot&promotion_only=False&min_price=0&works_type=None&max_price=0";
     }
 }

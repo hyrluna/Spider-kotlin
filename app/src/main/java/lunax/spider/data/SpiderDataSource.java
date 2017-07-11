@@ -19,6 +19,4 @@ public interface SpiderDataSource {
     void saveAlbums(List<Album> alba, String type);
     void saveArticles(List<Article> articles, String kind);
     void saveArticleCovers(ArticleCover articleCover, String articleTitle);
-
-    Observable<String> getTestData();
 }

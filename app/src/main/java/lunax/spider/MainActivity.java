@@ -1,6 +1,5 @@
 package lunax.spider;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -8,36 +7,20 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GestureDetectorCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewConfiguration;
 
-import org.greenrobot.greendao.query.Join;
-import org.greenrobot.greendao.query.QueryBuilder;
-import org.greenrobot.greendao.query.WhereCondition;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import lunax.spider.data.dataitem.Album;
-import lunax.spider.data.dataitem.AlbumDao;
-import lunax.spider.data.dataitem.DaoSession;
-import lunax.spider.data.dataitem.ImageSrc;
-import lunax.spider.data.dataitem.ImageSrcDao;
-import lunax.spider.data.dataitem.Note;
-import lunax.spider.data.dataitem.NoteDao;
-import lunax.spider.data.dataitem.Wallpaper;
-import lunax.spider.data.dataitem.WallpaperDao;
-import lunax.spider.data.remote.NetworkRequest;
 import lunax.spider.homepage.HomeFragment;
 import lunax.spider.homepage.HomePresenter;
 import lunax.spider.homepage.HomePresenterModule;
@@ -108,6 +91,8 @@ public class MainActivity extends BaseActivity
 
         gestureDetector = new GestureDetectorCompat(this, new ScrollDetector());
 
+        navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         HomeFragment homeFragment = HomeFragment.newInstance("p1", "p2");
         WallpaperFragment wpFragment = WallpaperFragment.newInstance("p1", "p2");
@@ -122,9 +107,6 @@ public class MainActivity extends BaseActivity
                 .show(homeFragment)
                 .commit();
 
-        navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
         DaggerMainComponent.builder()
                 .spiderRepositoryComponent(mRepositoryComponent)
                 .wallpaperPresenterModule(new WallpaperPresenterModule(wpFragment))
@@ -133,7 +115,6 @@ public class MainActivity extends BaseActivity
                 .inject(this);
 
         mHomePresenter.setRefresh(true);
-
     }
 
     @Override
@@ -145,24 +126,13 @@ public class MainActivity extends BaseActivity
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-//        WallpaperFragment fragment = (WallpaperFragment)
-//                getSupportFragmentManager().findFragmentByTag(TAG_WALLPAPER_FRAGMENT);
-//        if (fragment.isSelectorShow()) {
-//            fragment.closePopSelector();
-//        } else {
-//            super.onBackPressed();
-//        }
     }
 
-    @Override
-    public void onScroll(MotionEvent event) {
-//        Log.d("test", "ex = "+event.getX());
-//        Log.d("test", "ey = "+event.getY());
-//        switch (event.getAction()) {
-//            case MotionEvent.ACTION_DOWN:
-//                break;
-//        }
-//        gestureDetector.onTouchEvent(event);
+    public void onClick(View v) {
+        HomeFragment f = (HomeFragment) getSupportFragmentManager().findFragmentByTag(TAG_HOME_FRAGMENT);
+        if (f != null && !f.isHidden()) {
+            f.showArticleTypeList();
+        }
     }
 
     private class ScrollDetector extends GestureDetector.SimpleOnGestureListener {

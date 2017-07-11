@@ -21,7 +21,15 @@ import lunax.spider.data.dataitem.Article;
  * Created by G1494458 on 2017/5/31.
  */
 
-public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.ArticleViewHolder> {
+public class ArticleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private static final int TYPE_NORMAL =  0;
+    private static final int TYPE_LOAD_MORE =  1;
+
+    private int currentPage;
+    private int itemCount;
+    private int pageMax;
+    private boolean hasFooter = true;
 
     private List<Article> mArticles;
     private Context mContext;
@@ -29,25 +37,110 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
 
     public ArticleListAdapter(List<Article> articles, Context context, HomeContract.Presenter presenter) {
         this.mArticles = articles;
+//        if (mArticles != null) {
+//            itemCount = mArticles.size() + 1;
+//            if (mArticles.size() > 0) {
+//                pageMax = mArticles.get(0).getPageCount();
+//            }
+//        } else {
+//            itemCount = 0;
+//        }
         mContext = context;
         mPresenter = presenter;
+        currentPage = 0;
     }
 
     @Override
-    public ArticleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View v = inflater.inflate(R.layout.item_article, parent, false);
-        return new ArticleViewHolder(v);
+        View v = null;
+        switch (viewType) {
+            case TYPE_NORMAL:
+                v = inflater.inflate(R.layout.item_article, parent, false);
+                return new ArticleViewHolder(v);
+            case TYPE_LOAD_MORE:
+                v = inflater.inflate(R.layout.foot_recycler_view, parent, false);
+                return new FooterViewHolder(v);
+            default:
+                return null;
+        }
     }
 
     @Override
-    public void onBindViewHolder(ArticleViewHolder holder, int position) {
-        holder.bind(mArticles.get(position), mContext, mPresenter);
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        switch (getItemViewType(position)) {
+            case TYPE_NORMAL:
+                ArticleViewHolder articleViewHolder = (ArticleViewHolder) holder;
+                if (position < mArticles.size()) {
+                    articleViewHolder.bind(mArticles.get(position), mContext, mPresenter);
+                }
+                break;
+            case TYPE_LOAD_MORE:
+
+                break;
+        }
+
     }
 
     @Override
     public int getItemCount() {
-        return mArticles != null ? mArticles.size() : 0;
+        itemCount = 0;
+        if (mArticles != null) {
+            if (mArticles.size() > 0) {
+                pageMax = mArticles.get(0).getPageCount() - 1;
+            }
+
+            if (hasFooter) {
+                itemCount = mArticles.size() + 1;
+            } else {
+                itemCount = mArticles.size();
+            }
+        }
+        return itemCount;
+//        return mArticles != null ? mArticles.size() + 1 : 0;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == mArticles.size()) {
+            return TYPE_LOAD_MORE;
+        } else {
+            return TYPE_NORMAL;
+        }
+    }
+
+    public boolean hasMore() {
+        if (mArticles != null && mArticles.size() > 0 && currentPage < pageMax) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public String getNextPage() {
+        if (currentPage < pageMax) {
+            return (++ currentPage)*20 + "";
+        } else {
+            return "";
+        }
+    }
+
+    public void recoverFooter() {
+        hasFooter = true;
+    }
+
+    public void removeFooter() {
+        //Adapter数据为空时不能删除脚标
+        if (mArticles != null && mArticles.size() > 0 ) {
+            hasFooter = false;
+            notifyDataSetChanged();
+        }
+    }
+
+    public static class FooterViewHolder extends RecyclerView.ViewHolder {
+        public FooterViewHolder(View itemView) {
+            super(itemView);
+        }
     }
 
     public static class ArticleViewHolder extends RecyclerView.ViewHolder {

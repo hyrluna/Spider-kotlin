@@ -1,7 +1,6 @@
 package lunax.spider.data.local;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
@@ -111,7 +110,6 @@ public class SpiderLocalDataSource implements SpiderDataSource {
         for (int i = 0; i < articles.size(); i++) {
             Article article = articles.get(i);
             article.setKind(kind);
-            article.setId(i);
             articleDao.insert(article);
         }
     }
@@ -126,10 +124,5 @@ public class SpiderLocalDataSource implements SpiderDataSource {
             cover.setTitle(articleTitle);
             articleCoverDao.insert(cover);
         }
-    }
-
-    @Override
-    public Observable<String> getTestData() {
-        return Observable.just("local");
     }
 }
